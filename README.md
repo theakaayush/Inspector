@@ -36,8 +36,6 @@ Page
 3. Select **Load unpacked** and choose this repository folder.
 4. Open a normal webpage and click the Inspector extension button.
 
-Run the included check with `node --test test/manifest.test.mjs`.
-
 ## Principles
 
 - No framework unless the browser platform cannot cover the need.
