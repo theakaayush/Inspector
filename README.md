@@ -24,14 +24,19 @@ Page
 |- AI.md                 # Working rules for AI-assisted changes
 |- CONTEXT.md            # Current product decisions and session context
 |- README.md
-|- manifest.json         # Manifest V3 entry point (to be added)
-|- src/                  # Overlay, selector, editor, and export code (to be added)
-`- icons/                # Extension icons (to be added)
+|- manifest.json         # Manifest V3 entry point
+|- src/                  # Toolbar handler and isolated overlay
+`- test/                 # Minimal manifest test
 ```
 
 ## Development
 
-The extension implementation has not been added yet. Once built, it will load as an unpacked extension from this repository through `brave://extensions` or `chrome://extensions`.
+1. Open `brave://extensions`.
+2. Enable **Developer mode**.
+3. Select **Load unpacked** and choose this repository folder.
+4. Open a normal webpage and click the Inspector extension button.
+
+Run the included check with `node --test test/manifest.test.mjs`.
 
 ## Principles
 

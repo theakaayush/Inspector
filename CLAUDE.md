@@ -6,8 +6,8 @@ Inspector is a Manifest V3 Brave/Chromium extension that lets users select a pag
 
 ```powershell
 # Development: open brave://extensions, enable Developer mode, then Load unpacked and select this project folder.
-# Test: manually run the smoke checklist on a normal webpage; no automated suite exists yet.
-# Build: Compress-Archive -Path manifest.json,src,icons -DestinationPath Inspector.zip -Force
+# Test: node --test test/manifest.test.mjs
+# Build: Compress-Archive -Path manifest.json,src -DestinationPath Inspector.zip -Force
 # Syntax check: Get-ChildItem src -Recurse -Filter *.js | ForEach-Object { node --check $_.FullName }
 ```
 
@@ -18,6 +18,7 @@ manifest.json       Manifest V3 configuration
 src/background.js   Toolbar-click handler and script injection
 src/inspector.js    In-page selection, UI, edits, and history
 src/inspector.css   Isolated overlay styles
+test/               Minimal Node test coverage
 icons/              Extension icons
 ```
 

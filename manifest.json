@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "Inspector",
+  "version": "0.1.1",
+  "description": "Visually inspect and preview page edits without opening developer tools.",
+  "permissions": ["activeTab", "scripting"],
+  "icons": {
+    "16": "icons/logo.png",
+    "48": "icons/logo.png",
+    "128": "icons/logo.png"
+  },
+  "action": {
+    "default_title": "Inspector",
+    "default_icon": {
+      "16": "icons/logo.png",
+      "32": "icons/logo.png"
+    }
+  },
+  "background": {
+    "service_worker": "src/background.js"
+  },
+  "web_accessible_resources": [{
+    "resources": ["src/inspector.css"],
+    "matches": ["<all_urls>"]
+  }]
+}
