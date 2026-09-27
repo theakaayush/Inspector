@@ -3,6 +3,8 @@ void (async () => {
   const existing = document.getElementById(hostId);
 
   if (existing) {
+    existing.style.display = "";
+    existing.dispatchEvent(new Event("inspector:show"));
     return;
   }
 
@@ -58,8 +60,7 @@ void (async () => {
     check: ["M4.5 12.75l6 6 9-13.5"],
     swatch: ["M4.098 19.902a3.75 3.75 0 0 0 5.304 0l6.401-6.402M6.75 21A3.75 3.75 0 0 1 3 17.25V4.125C3 3.504 3.504 3 4.125 3h5.25c.621 0 1.125.504 1.125 1.125v4.072M6.75 21a3.75 3.75 0 0 0 3.75-3.75V8.197M6.75 21h13.125c.621 0 1.125-.504 1.125-1.125v-5.25c0-.621-.504-1.125-1.125-1.125h-4.072M10.5 8.197l2.88-2.88c.438-.439 1.15-.439 1.59 0l3.712 3.713c.44.44.44 1.152 0 1.59l-2.879 2.88M6.75 17.25h.008v.008H6.75v-.008Z"],
     h1: ["M2.243 4.493v7.5m0 0v7.502m0-7.501h10.5m0-7.5v7.5m0 0v7.501m4.501-8.627 2.25-1.5v10.126m0 0h-2.25m2.25 0h2.25"],
-    "squares-2x2": ["M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"],
-    "eye-dropper": ["m15 11.25 1.5 1.5.75-.75V8.758l2.276-.61a3 3 0 1 0-3.675-3.675l-.61 2.277H12l-.75.75 1.5 1.5M15 11.25l-8.47 8.47c-.34.34-.8.53-1.28.53s-.94.19-1.28.53l-.97.97-.75-.75.97-.97c.34-.34.53-.8.53-1.28s.19-.94.53-1.28L12.75 9M15 11.25 12.75 9"]
+    "squares-2x2": ["M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25A2.25 2.25 0 0 1 13.5 18v-2.25Z"]
   };
 
   const icon = (name, size = 18) => {
@@ -129,42 +130,21 @@ void (async () => {
   const backgroundColor = input("color", "#ffffff");
   const backgroundColorHex = input("text", "#FFFFFF");
   const fontSizeControl = $("div", { className: "compound" }, [fontSize, fontUnit]);
-  const dropper = (onPick) => {
-    const drop = button("", "icon-button");
-    drop.replaceChildren(icon("eye-dropper"));
-    drop.title = "Pick color from page";
-    drop.setAttribute("aria-label", "Pick color from page");
-    drop.addEventListener("click", async () => {
-      if (typeof EyeDropper === "undefined") {
-        notify("Eyedropper not supported in this browser");
-        return;
-      }
-      try {
-        onPick((await new EyeDropper().open()).sRGBHex);
-      } catch { /* dismissed */ }
-    });
-    return drop;
-  };
-  const textColorControl = $("div", { className: "color-control" }, [textColor, textColorHex, dropper((picked) => {
-    textColor.value = picked;
-    textColorHex.value = picked.toUpperCase();
-    changeStyle("color", picked);
-  })]);
-  const backgroundColorControl = $("div", { className: "color-control" }, [backgroundColor, backgroundColorHex, dropper((picked) => {
-    backgroundColor.value = picked;
-    backgroundColorHex.value = picked.toUpperCase();
-    changeStyle("background-color", picked);
-  })]);
+  const textColorControl = $("div", { className: "color-control" }, [textColor, textColorHex]);
+  const backgroundColorControl = $("div", { className: "color-control" }, [backgroundColor, backgroundColorHex]);
 
   const textEditor = $("textarea", { disabled: true, placeholder: "Select a text element to edit its content." });
   const textNotice = $("p", { className: "notice", text: "Select a text element to edit its content." });
 
   const width = input("text");
+  width.setAttribute("placeholder", "px");
   const height = input("text");
+  height.setAttribute("placeholder", "px");
   const sideNames = ["top", "right", "bottom", "left"];
   const sideCell = (name) => {
     const box = input("text");
     box.setAttribute("aria-label", name);
+    box.setAttribute("placeholder", "px");
     return { box, cell: $("div", { className: "side" }, [box, $("span", { text: name })]) };
   };
   const marginSides = sideNames.map(sideCell);
@@ -182,6 +162,7 @@ void (async () => {
     field("Background", backgroundColorControl)
   ], true, "swatch");
   const typeGroups = $("div", { className: "type-groups" });
+  const groupColorRefs = [];
   const stylePanel = $("section", { className: "tab-panel is-active", role: "tabpanel", "data-panel": "style" }, [
     colorDetails,
     typographyDetails,
@@ -256,9 +237,16 @@ void (async () => {
     return classes.length ? `${name}.${classes.join(".")}` : name;
   };
 
+  const textLeaves = (root) => {
+    const leaves = [];
+    for (const node of root.querySelectorAll("h1,h2,h3,h4,h5,h6,p,span,a,li,button,small,strong,em")) {
+      if (node.children.length === 0 && (node.textContent || "").trim()) leaves.push(node);
+    }
+    return leaves;
+  };
+
   // ponytail: first node per distinct text style, max 4 groups; fuller tree grouping only if this falls short
-  const collectTextStyles = (root) => {
-    const seen = new Map();
+  const collectTextStyles = (root) => {    const seen = new Map();
     for (const node of root.querySelectorAll("h1,h2,h3,h4,h5,h6,p,span,a,li,button,small,strong,em")) {
       if (node.children.length > 0 || !(node.textContent || "").trim()) continue;
       const cs = getComputedStyle(node);
@@ -270,6 +258,16 @@ void (async () => {
     return [...seen.values()];
   };
 
+  // Group rows are built once per selection (rebuilding mid-drag would steal
+  // focus), so container recolors patch their displayed values in place.
+  const refreshGroupColors = () => {
+    for (const ref of groupColorRefs) {
+      if (!ref.node.isConnected) continue;
+      const value = hex(getComputedStyle(ref.node).color, "#1F2937");
+      ref.picker.value = value;
+      ref.hexIn.value = value;
+    }
+  };
   const groupTitle = (group) => {
     const cs = getComputedStyle(group.node);
     return `Typography · ${describe(group.node)} · ${cs.fontSize} · ${cs.fontWeight}${group.nodes.length > 1 ? ` · ${group.nodes.length} texts` : ""}`;
@@ -409,10 +407,19 @@ void (async () => {
 
   const changeStyle = (property, value) => {
     if (!selected || !value) return;
-    const before = selected.style.getPropertyValue(property);
-    if (before === value) return;
-    writeStyle(selected, property, value);
-    record({ target: selected, type: "style", property, before, after: value });
+    // color inherits but descendants usually carry their own explicit color, so a
+    // container recolor must fan out to nested texts to be visible at all.
+    const targets = property === "color" && selected.children.length > 0
+      ? [selected, ...textLeaves(selected)]
+      : [selected];
+    for (const target of targets) {
+      if (!baselines.has(target)) baselines.set(target, snapshot(target));
+      const before = target.style.getPropertyValue(property);
+      if (before === value) continue;
+      writeStyle(target, property, value);
+      record({ target, type: "style", property, before, after: value });
+    }
+    if (targets.length > 1) refreshGroupColors();
     positionSelection();
   };
 
@@ -466,11 +473,11 @@ void (async () => {
     textColorHex.value = textColor.value;
     backgroundColor.value = hex(visibleBackground(element), "#FFFFFF");
     backgroundColorHex.value = backgroundColor.value;
-    width.value = computed.width;
-    height.value = computed.height;
+    width.value = readNumber(computed.width);
+    height.value = readNumber(computed.height);
     ["Top", "Right", "Bottom", "Left"].forEach((side, i) => {
-      marginSides[i].box.value = computed[`margin${side}`];
-      paddingSides[i].box.value = computed[`padding${side}`];
+      marginSides[i].box.value = readNumber(computed[`margin${side}`]);
+      paddingSides[i].box.value = readNumber(computed[`padding${side}`]);
     });
     textEditor.value = isTextEditable(element) ? readText(element) : "";
     textNotice.textContent = isTextEditable(element) ? "Text updates preview immediately on the page." : "Select a text element rather than a container to edit content.";
@@ -479,6 +486,7 @@ void (async () => {
     // pending font/color value travels with the pointer. Container typography is
     // edited per detected text style below — no extra pick-a-style step.
     const groups = element.children.length > 0 ? collectTextStyles(element) : [];
+    groupColorRefs.length = 0;
     typeGroups.replaceChildren(...groups.map((group, index) => {
       const first = getComputedStyle(group.node);
       const family = select([]);
@@ -489,10 +497,13 @@ void (async () => {
       unit.value = ["px", "rem", "em", "%"].includes(readUnit(first.fontSize)) ? readUnit(first.fontSize) : "px";
       const weight = select([["400", "400"], ["500", "500"], ["600", "600"], ["700", "700"], ["800", "800"]]);
       weight.value = ["400", "500", "600", "700", "800"].includes(first.fontWeight) ? first.fontWeight : "400";
-      const height = input("text", first.lineHeight === "normal" ? "" : first.lineHeight);
-      const spacing = input("text", first.letterSpacing === "normal" ? "" : first.letterSpacing);
+      const height = input("text", first.lineHeight === "normal" ? "" : readNumber(first.lineHeight));
+      height.setAttribute("placeholder", "px");
+      const spacing = input("text", first.letterSpacing === "normal" ? "" : readNumber(first.letterSpacing));
+      spacing.setAttribute("placeholder", "px");
       const picker = input("color", hex(first.color, "#1F2937"));
       const hexIn = input("text", hex(first.color, "#1F2937"));
+      groupColorRefs.push({ node: group.node, picker, hexIn });
       const colorRow = $("div", { className: "color-control" }, [picker, hexIn]);
       const section = details(groupTitle(group), [
         field("Font family", family),
@@ -503,11 +514,6 @@ void (async () => {
         field("Text color", colorRow)
       ], index === 0, "h1");
       const title = section.querySelector("summary");
-      colorRow.append(dropper((picked) => {
-        picker.value = picked;
-        hexIn.value = picked.toUpperCase();
-        changeGroupStyle(group, title, "color", picked);
-      }));
       family.addEventListener("change", () => changeGroupStyle(group, title, "font-family", quoteFamily(family.value)));
       size.addEventListener("input", () => changeGroupStyle(group, title, "font-size", `${size.value}${unit.value}`));
       unit.addEventListener("change", () => changeGroupStyle(group, title, "font-size", `${size.value}${unit.value}`));
@@ -896,22 +902,19 @@ void (async () => {
   };
 
   const close = () => {
-    document.removeEventListener("pointermove", onPointerMove, true);
-    document.removeEventListener("click", onPageClick, true);
-    document.removeEventListener("keydown", onKeyDown, true);
-    window.removeEventListener("resize", reposition);
-    window.removeEventListener("scroll", reposition, true);
-    host.remove();
+    // Hide instead of destroying: history, baselines, and selection survive
+    // so undo/reset/Copy CSS keep working when reopened via the toolbar.
+    host.style.display = "none";
   };
 
   const onPointerMove = (event) => {
-    if (isInspectorEvent(event) || !canInspect(event.target)) return;
+    if (host.style.display === "none" || isInspectorEvent(event) || !canInspect(event.target)) return;
     hovered = event.target;
     positionSelection();
   };
 
   const onPageClick = (event) => {
-    if (isInspectorEvent(event) || !canInspect(event.target)) return;
+    if (host.style.display === "none" || isInspectorEvent(event) || !canInspect(event.target)) return;
     event.preventDefault();
     event.stopImmediatePropagation();
     selectElement(event.target);
@@ -953,11 +956,11 @@ void (async () => {
   fontUnit.addEventListener("change", () => changeStyle("font-size", `${fontSize.value}${fontUnit.value}`));
   fontWeight.addEventListener("change", () => changeStyle("font-weight", fontWeight.value));
   lineHeight.addEventListener("input", () => changeStyle("line-height", lengthValue(lineHeight.value)));
-  width.addEventListener("input", () => changeStyle("width", width.value));
-  height.addEventListener("input", () => changeStyle("height", height.value));
+  width.addEventListener("input", () => changeStyle("width", lengthValue(width.value)));
+  height.addEventListener("input", () => changeStyle("height", lengthValue(height.value)));
   ["top", "right", "bottom", "left"].forEach((side, i) => {
-    marginSides[i].box.addEventListener("input", () => changeStyle(`margin-${side}`, marginSides[i].box.value));
-    paddingSides[i].box.addEventListener("input", () => changeStyle(`padding-${side}`, paddingSides[i].box.value));
+    marginSides[i].box.addEventListener("input", () => changeStyle(`margin-${side}`, lengthValue(marginSides[i].box.value)));
+    paddingSides[i].box.addEventListener("input", () => changeStyle(`padding-${side}`, lengthValue(paddingSides[i].box.value)));
   });
   textEditor.addEventListener("input", () => changeText(textEditor.value));
 
@@ -999,6 +1002,10 @@ void (async () => {
   };
 
   const reposition = () => { positionSelection(); positionOverlay(); };
+  host.addEventListener("inspector:show", () => {
+    positionSelection();
+    positionOverlay();
+  });
   document.addEventListener("pointermove", onPointerMove, true);
   document.addEventListener("click", onPageClick, true);
   document.addEventListener("keydown", onKeyDown, true);

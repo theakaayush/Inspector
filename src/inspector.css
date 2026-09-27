@@ -338,17 +338,7 @@ textarea {
 .color-control {
   display: grid;
   gap: 6px;
-  grid-template-columns: 34px minmax(0, 1fr) 34px;
-}
-
-.icon-button {
-  align-items: center;
-  border: 1px solid #d0d5dd;
-  display: inline-flex;
-  justify-content: center;
-  min-height: 36px;
-  padding: 0;
-  width: 100%;
+  grid-template-columns: 34px minmax(0, 1fr);
 }
 
 .sides {
@@ -558,10 +548,6 @@ textarea {
 
 .inspector-layer[data-theme="dark"] summary::after {
   border-color: #9aa1ad;
-}
-
-.inspector-layer[data-theme="dark"] .icon-button {
-  border-color: #3a4048;
 }
 
 .inspector-layer[data-theme="dark"] .element-name {

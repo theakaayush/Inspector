@@ -11,7 +11,7 @@
 - The UI is minimal, modern, light, and uses restrained black accents (`#111111` primary, `#000000` hover).
 - The interface follows the page: dark pages get the dark theme, light pages get the light theme; a sun/moon toggle beside the panel close button overrides it for the session.
 - Product typeface: **DM Sans** with system fallbacks.
-- Icons: **Heroicons** outline set (https://heroicons.com, MIT) — 24x24, 1.5px stroke, `currentColor`, inlined locally; in use: moon, sun, x-mark, arrow-uturn-left, arrow-uturn-right, camera, pencil, arrow-right, arrow-down-tray, copy, check, swatch, h1, squares-2x2, eye-dropper (rectangle/circle are custom pictograms in the same stroke style).
+- Icons: **Heroicons** outline set (https://heroicons.com, MIT) — 24x24, 1.5px stroke, `currentColor`, inlined locally; in use: moon, sun, x-mark, arrow-uturn-left, arrow-uturn-right, camera, pencil, arrow-right, arrow-down-tray, copy, check, swatch, h1, squares-2x2 (rectangle/circle are custom pictograms in the same stroke style).
 - The extension appears as an in-page overlay on the active tab.
 - A selected element receives a visible outline and an element label such as `h1.hero-title`.
 - The floating overlay is anchored above the selected element and holds undo, redo, screenshot, and Copy CSS (no select mode; hovering/selecting is always on).
@@ -50,7 +50,8 @@ Page overlay (anchored above selection)
 - Reset restores all edited elements and deselects.
 - Apply confirms current changes in the tab.
 - Copy CSS produces CSS for the user to copy.
-- Closing Inspector removes its overlay; permanent third-party site changes are not part of the first release.
+- Closing hides the panel but keeps the session: toolbar click reopens with selection, undo/redo, and Copy CSS intact; page reload still ends the session.
+- Permanent third-party site changes are not part of the first release.
 
 ## Next task
 
