@@ -9,26 +9,6 @@ A minimal visual inspector for Brave and other Chromium browsers. Select an elem
 - Undo, redo, reset, and export CSS.
 - Keep edits inside the active browser tab.
 
-## Interface
-
-```text
-Page
-|- Floating toolbar: select | undo | redo | export
-`- Side panel: Style | Text | Layout
-```
-
-## Project layout
-
-```text
-.
-|- AI.md                 # Working rules for AI-assisted changes
-|- CONTEXT.md            # Current product decisions and session context
-|- README.md
-|- manifest.json         # Manifest V3 entry point
-|- src/                  # Toolbar handler and isolated overlay
-`- test/                 # Minimal manifest test
-```
-
 ## Development
 
 1. Open `brave://extensions`.
